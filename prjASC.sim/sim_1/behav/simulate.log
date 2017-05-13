@@ -1,0 +1,9 @@
+Vivado Simulator 2016.4
+Time resolution is 1 ps
+time                    0, aluResult = 0000002f (47)
+time                15000, aluResult = 00000011 (17)
+time                30000, aluResult = 00000000 (0)
+time                45000, aluResult = 0000002f (47)
+time                60000, aluResult = 00000000 (0)
+ruction = ad00004c
+$finish called at time : 110 ns : File "C:/Users/Mircea/prjASC/prjASC.srcs/sim_1/imports/MIPS-ASC/tb_iMem.v" Line 26
