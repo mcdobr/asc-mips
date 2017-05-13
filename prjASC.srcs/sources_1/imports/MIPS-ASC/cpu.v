@@ -18,7 +18,7 @@ module cpu(clk);
 	wire [5:0] opcodeID, functID;
 	wire [4:0] raID, rbID, rcID, shamtID;
 	wire [15:0] imm16ID;
-	wire [31:0] daID, dbID, dcID, instructionID, jumpPCID, imm32ID;	
+	wire [31:0] daID, dbID, instructionID, jumpPCID, imm32ID;	
 	
 	// EX wires
 	wire [1:0] wbControlEX;
@@ -115,11 +115,36 @@ module cpu(clk);
 	/*
 	 * Execute
 	 */
+	
+	wire [1:0] forwardA, forwardB;
+	wire [31:0] forwardedDA, forwardedDB;
+	
+	// dataA, dataB considering possible forwarding
+	ForwardingUnit forwardUnitComp(
+		.EX_MEMregWrite(wbControlMEM[1]),
+		.MEM_WBregWrite(wbControlWB[1]),
+		.EX_MEMrc(rcMEM),
+		.MEM_WBrc(rcWB),
+		.ID_EXra(raEX),
+		.ID_EXrb(rbEX),
+		.forwardA(forwardA),
+		.forwardB(forwardB)
+	);
+	
+	// Cele doua muxuri
+	assign forwardedDA = (forwardA == 2'b00) ? daEX :
+						 (forwardA == 2'b01) ? dcWB :
+						 dOutMEM;
+	
+	assign forwardedDB = (forwardB == 2'b00) ? dbEX :
+						 (forwardB == 2'b01) ? dcWB :
+						 dOutMEM;
+						 	
 	alu aluComp(
-		.opA(daEX),
-		.opB((exControlEX[0] == 1) ? imm32EX : dbEX),	// (aluSrc == 1) ? imm32 : db
-		.aluOp(exControlEX[2:1]),						// aluOp
-		.funct(imm32EX[5:0]),							// funct
+		.opA(forwardedDA),										// daEX in trecut
+		.opB((exControlEX[0] == 1) ? imm32EX : forwardedDB),	// (aluSrc == 1) ? imm32 : db .... dbEX in trecut
+		.aluOp(exControlEX[2:1]),								// aluOp
+		.funct(imm32EX[5:0]),									// funct
 		.aluResult(aluResultEX),
 		.aluZero(aluZeroEX)
 	);
@@ -128,8 +153,8 @@ module cpu(clk);
 		.clk(clk),
 		.wbControl(wbControlEX),
 		.memControl(memControlEX),
-		.rc(exControlEX[2] == 1 ? rcEX : rbEX),		// (regDst == 1) ? rc : rb
-		.jumpPC(jumpPCEX + imm32 << 2),				// PC + (imm32 << 2)
+		.rc(exControlEX[3] == 1 ? rcEX : rbEX),		// (regDst == 1) ? rc : rb
+		.jumpPC(jumpPCEX + imm32EX << 2),				// PC + (imm32 << 2)
 		.aluResult(aluResultEX),
 		.writeDataIn(dbEX),
 		.aluZero(aluZeroEX),

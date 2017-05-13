@@ -9,11 +9,16 @@ WARNING: [XSIM 43-4100] "C:/Users/Mircea/prjASC/prjASC.sim/sim_1/behav/glbl.v" L
 WARNING: [XSIM 43-4100] "C:/Users/Mircea/prjASC/prjASC.sim/sim_1/behav/glbl.v" Line 6. Module glbl has a timescale but at least one module in design doesn't have timescale.
 Completed simulation data flow analysis
 Time Resolution for simulation is 1ps
-Compiling module xil_defaultlib.alu
-Compiling module xil_defaultlib.dataMem
-Compiling module xil_defaultlib.iMem
 Compiling module xil_defaultlib.pcLogic
+Compiling module xil_defaultlib.iMem
+Compiling module xil_defaultlib.IF_ID
 Compiling module xil_defaultlib.regFile
+Compiling module xil_defaultlib.ID_EX
+Compiling module xil_defaultlib.ForwardingUnit
+Compiling module xil_defaultlib.alu
+Compiling module xil_defaultlib.EX_MEM
+Compiling module xil_defaultlib.dataMem
+Compiling module xil_defaultlib.MEM_WB
 Compiling module xil_defaultlib.cpu
 Compiling module xil_defaultlib.tb_cpu
 Compiling module xil_defaultlib.glbl

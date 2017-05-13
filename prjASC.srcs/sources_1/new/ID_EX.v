@@ -29,8 +29,8 @@ wbControlOut, memControlOut, exControlOut, raOut, rbOut, rcOut, jumpPCOut, dataA
 
 	always@(posedge clk) begin
 		wbControlOut <= wbControl;
-		memControlOut <= memControlOut;
-		exControlOut <= exControlOut;
+		memControlOut <= memControl;
+		exControlOut <= exControl;
 		raOut <= ra;
 		rbOut <= rb;
 		rcOut <= rc;
