@@ -1,11 +1,16 @@
-module IF_ID #(parameter WIDTH = 32)(clk, pc_plus4, instruction, pc_plus4Out, instructionOut);
+module IF_ID #(parameter WIDTH = 32)(clk, jumpPC, instruction, jumpPCOut, instructionOut);
 	
 	input clk;
-	input [WIDTH - 1 : 0] pc_plus4, instruction;
-	output reg [WIDTH - 1 : 0] pc_plus4Out, instructionOut;
+	input [WIDTH - 1 : 0] jumpPC, instruction;
+	output reg [WIDTH - 1 : 0] jumpPCOut, instructionOut;
+
+	initial begin
+		jumpPCOut = 0;
+		instructionOut = 0;
+	end
 
 	always@(posedge clk) begin
-		pc_plus4Out <= pc_plus4;
+		jumpPCOut <= jumpPC;
 		instructionOut <= instruction;
 	end
 endmodule

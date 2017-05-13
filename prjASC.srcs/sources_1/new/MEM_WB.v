@@ -8,6 +8,13 @@ module MEM_WB(clk, wbControl, rc, aluResult, memResult, wbControlOut, rcOut, alu
 	output reg [4:0] rcOut;
 	output reg [31:0] aluResultOut, memResultOut;
 	
+	initial begin
+		wbControlOut = 0;
+		rcOut = 0;
+		aluResultOut = 0;
+		memResultOut = 0;
+	end
+	
 	always@(posedge clk) begin
 		wbControlOut <= wbControl;
 		rcOut <= rc;

@@ -1,90 +1,181 @@
-module cpu #(parameter WIDTH = 32)(clk);
-
+module cpu(clk);
 	input clk;
 
 	// Internal state
 	reg aluSrc, memRead, memWrite, memToReg, regDst, regWrite, branch;
 	reg [1:0] aluOp;
 
-
-	// Glue
-	wire [5:0] opcode, funct;
-	wire [4:0] ra, rb, rc, shamt;
-	wire [WIDTH - 1 : 0] pc, instruction;
-	wire [WIDTH - 1 : 0] da, db, dc;
-	wire [WIDTH -1 : 0] dMemOut;
-
-	wire [WIDTH / 2 - 1: 0] imm16;
-	wire [WIDTH - 1 : 0] imm32;
-
-
-	// Alu stuff
-	wire [WIDTH - 1 : 0] aluResult;
-	wire aluZero;
-
 	// Opcodes
 	parameter RTYPE = 6'b000000;
 	parameter LW	= 6'b100011;
 	parameter SW	= 6'b101011;
 	parameter BEQ	= 6'b000100;
-
-	alu aluComp(
-		.opA(da),
-		.opB((aluSrc == 1) ? imm32 : db),		// Trebuie adauat un mux
-		.aluOp(aluOp),
-		.funct(funct),
-		.aluResult(aluResult),
-		.aluZero(aluZero)
-	);
-
-	dataMem dMemComp(
+	
+	// IF wires
+	wire [31:0] pcIF, instructionIF;
+	
+	// ID wires
+	wire [5:0] opcodeID, functID;
+	wire [4:0] raID, rbID, rcID, shamtID;
+	wire [15:0] imm16ID;
+	wire [31:0] daID, dbID, dcID, instructionID, jumpPCID, imm32ID;	
+	
+	// EX wires
+	wire [1:0] wbControlEX;
+	wire [2:0] memControlEX;
+	wire [3:0] exControlEX;
+	wire [4:0] raEX, rbEX, rcEX;
+	wire [31:0] daEX, dbEX, imm32EX, jumpPCEX, aluResultEX;
+	wire aluZeroEX;
+		
+	// MEM wires
+	wire aluZeroMEM;
+	wire [1:0] wbControlMEM;
+	wire [2:0] memControlMEM;
+	wire [4:0] rcMEM;
+	wire [31:0] jumpPCMEM, aluResultMEM, writeDataMEM, dOutMEM;
+	
+	// WB wires	
+	wire [1:0] wbControlWB;
+	wire [4:0] rcWB;
+	wire [31:0] aluResultWB, memResultWB, dcWB;	
+	
+	/*
+	 * Instruction fetch
+	 */
+	pcLogic pcComp(
 		.clk(clk),
-		.memRead(memRead),
-		.memWrite(memWrite),
-		.address(aluResult),
-		.dataIn(db),			// ?
-		.dataOut(dMemOut)
+		.pcSrc(aluZeroMEM & memControlMEM[2]),
+		.jump(jumpPCMEM),
+		.pc(pcIF)
 	);
 	
 	iMem iMemComp(
-		.readAddr(pc),
-		.instruction(instruction)
+		.readAddr(pcIF),
+		.instruction(instructionIF)
 	);
 	
-	pcLogic pcComp(
+	IF_ID IF_IDcomp(
 		.clk(clk),
-		.pcSrc(aluZero & branch),
-		.offset(imm32),
-		.pc(pc)
+		.jumpPC(pcIF),	// Fara +4 din cauza neconcordantei QtSpim/ H&P
+		.instruction(instructionIF),
+		.jumpPCOut(jumpPCID),
+		.instructionOut(instructionID)
 	);
+	
+	/*
+	 * Instruction decode
+	 */
+	assign opcodeID = instructionID[31:26];
+	assign raID = instructionID[25:21];
+	assign rbID = instructionID[20:16];
+	assign rcID = instructionID[15:11];
+	assign shamtID = instructionID[10:6];	
+	assign functID = instructionID[5:0];	 	
+	// Immediate values (32-bit one is sign extended)
+	assign imm16ID = instructionID[15:0];
+	assign imm32ID = {{16{imm16ID[15]}}, imm16ID};
+	 
 	regFile regComp(
 		.clk(clk),
-		.regWrite(regWrite),
-		.ra(ra),
-		.rb(rb),
-		.rc((regDst == 1) ? rc : rb),
-		.da(da),
-		.db(db),
-		.dc(dc)
+		.regWrite(wbControlWB[1]),
+		.ra(raID),
+		.rb(rbID),
+		.rc(rcWB),
+		.da(daID),
+		.db(dbID),
+		.dc(dcWB)
 	);
-
-	assign opcode = instruction[31:26];
-	assign ra = instruction[25:21];
-	assign rb = instruction[20:16];
-	assign rc = instruction[15:11];
-	assign shamt = instruction[10:6];	
-	assign funct = instruction[5:0];
-
-	// Immediate values (32-bit one is sign extended)
-	assign imm16 = instruction[15:0];
-	assign imm32 = {{16{imm16[15]}}, imm16};
-
-
-	assign dc = (memToReg == 1) ? dMemOut : aluResult;
+	
+	ID_EX ID_EXcomp(
+		.clk(clk),
+		.wbControl({regWrite, memToReg}),
+		.memControl({branch, memRead, memWrite}),
+		.exControl({regDst, aluOp, aluSrc}),
+		.ra(raID),
+		.rb(rbID),
+		.rc(rcID),
+		.jumpPC(jumpPCID),
+		.dataA(daID),
+		.dataB(dbID),
+		.imm32(imm32ID),
+		// Outputs
+		.wbControlOut(wbControlEX),
+		.memControlOut(memControlEX),
+		.exControlOut(exControlEX),
+		.raOut(raEX),
+		.rbOut(rbEX),
+		.rcOut(rcEX),
+		.jumpPCOut(jumpPCEX),
+		.dataAOut(daEX),
+		.dataBOut(dbEX),
+		.imm32Out(imm32EX)
+	);
+	
+	/*
+	 * Execute
+	 */
+	alu aluComp(
+		.opA(daEX),
+		.opB((exControlEX[0] == 1) ? imm32EX : dbEX),	// (aluSrc == 1) ? imm32 : db
+		.aluOp(exControlEX[2:1]),						// aluOp
+		.funct(imm32EX[5:0]),							// funct
+		.aluResult(aluResultEX),
+		.aluZero(aluZeroEX)
+	);
+	
+	EX_MEM EX_MEMcomp(
+		.clk(clk),
+		.wbControl(wbControlEX),
+		.memControl(memControlEX),
+		.rc(exControlEX[2] == 1 ? rcEX : rbEX),		// (regDst == 1) ? rc : rb
+		.jumpPC(jumpPCEX + imm32 << 2),				// PC + (imm32 << 2)
+		.aluResult(aluResultEX),
+		.writeDataIn(dbEX),
+		.aluZero(aluZeroEX),
+		// Outputs
+		.wbControlOut(wbControlMEM),
+		.memControlOut(memControlMEM),
+		.rcOut(rcMEM),
+		.jumpPCOut(jumpPCMEM),
+		.aluResultOut(aluResultMEM),
+		.writeDataOut(writeDataMEM),
+		.aluZeroOut(aluZeroMEM)
+	);
+	
+	/* 
+	 * Memory access
+	 */
+	dataMem dMemComp(
+		.clk(clk),
+		.memRead(memControlMEM[1]),
+		.memWrite(memControlMEM[0]),
+		.address(aluResultMEM),
+		.dataIn(writeDataMEM),
+		.dataOut(dOutMEM)
+	);
+	
+	MEM_WB MEM_WBcomp(
+		.clk(clk),
+		.wbControl(wbControlMEM),
+		.rc(rcMEM),
+		.aluResult(aluResultMEM),
+		.memResult(dOutMEM),
+		// Outputs
+		.wbControlOut(wbControlWB),
+		.rcOut(rcWB),
+		.aluResultOut(aluResultWB),
+		.memResultOut(memResultWB)
+		);
+	 
+	/* 
+	 * Write Back
+	 */
+	assign dcWB = (wbControlWB[0] == 1) ? memResultWB : aluResultWB;	
 
 	// Control behavior
-	always@(opcode) begin
-		casex (opcode)
+	always@(opcodeID) begin
+		casex (opcodeID)
 			RTYPE:	{regDst, aluSrc, memToReg, regWrite, memRead, memWrite, branch, aluOp} = 9'b100100010;
 			LW:		{regDst, aluSrc, memToReg, regWrite, memRead, memWrite, branch, aluOp} = 9'b011110000;
 			SW:		{regDst, aluSrc, memToReg, regWrite, memRead, memWrite, branch, aluOp} = 9'bx1x001000;
