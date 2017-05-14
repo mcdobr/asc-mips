@@ -94,6 +94,7 @@ module cpu(clk);
 	
 	HazardDetectionUnit hazComp(
 		.ID_EXmemRead(memControlEX[1]),
+		.waitForBranch(opcodeID == BEQ),
 		.IF_IDra(raID),
 		.IF_IDrb(rbID),
 		.ID_EXrb(rbEX),
