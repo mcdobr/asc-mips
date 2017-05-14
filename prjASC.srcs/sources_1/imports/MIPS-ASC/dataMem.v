@@ -12,10 +12,11 @@ module dataMem #(parameter WIDTH = 32, parameter WORDS = 1024) (clk, memRead, me
 		$readmemh(DATA_FILE, mem, 0, WORDS - 1);
 	end
 
-	// Read asincron
+	// Read sincron in a doua jumatate
+	
 	assign dataOut = mem[address >> 2];
-
-	// Write sincron
+	
+	// Write sincron in prima jumatate
 	always@(posedge clk) begin
 		if (memWrite == 1)
 			mem[address >> 2] <= dataIn;

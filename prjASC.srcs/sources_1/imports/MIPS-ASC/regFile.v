@@ -19,14 +19,39 @@ module regFile #(parameter WIDTH = 32) (clk, regWrite, ra, rb, rc, da, db, dc);
 		$readmemh(DATA_FILE, mem, 0, WIDTH - 1);
 	end
 	*/
-	
 
+	
+	always@* begin
+		if (regWrite == 1 && rc == ra) begin
+			da = dc;
+		end else begin
+			da = mem[ra];
+		end
+	end
+	
+	always@* begin
+		if (regWrite == 1 && rc == rb) begin
+			db = dc;
+		end else begin
+			db = mem[rb];
+		end
+	end
+	
 	// Scriere sincrona
 	always@(posedge clk) begin
 		if (regWrite == 1'b1)
 			mem[rc] <= dc;
 	end
 
+	/*
+	// Citire sincrona pe frontul negativ (adica in a doua jumatate)
+	always@(negedge clk) begin
+		da <= mem[ra];
+		db <= mem[rb];
+	end
+	*/
+
+	/*
 	// Citire asincrona
 	always@(*) begin
 		da = mem[ra];
@@ -35,5 +60,5 @@ module regFile #(parameter WIDTH = 32) (clk, regWrite, ra, rb, rc, da, db, dc);
 	always@(*) begin
 		db = mem[rb];
 	end
-
+	*/
 endmodule

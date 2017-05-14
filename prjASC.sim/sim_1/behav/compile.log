@@ -1,3 +1,7 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/imports/MIPS-ASC/regFile.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module regFile
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/imports/MIPS-ASC/dataMem.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dataMem
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/new/ID_EX.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module ID_EX
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/new/HazardDetectionUnit.v" into library xil_defaultlib
@@ -12,12 +16,8 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/
 INFO: [VRFC 10-311] analyzing module IF_ID
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/new/MEM_WB.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module MEM_WB
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/imports/MIPS-ASC/dataMem.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module dataMem
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/new/EX_MEM.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module EX_MEM
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/imports/MIPS-ASC/regFile.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module regFile
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/imports/MIPS-ASC/iMem.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module iMem
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/Mircea/prjASC/prjASC.srcs/sources_1/imports/MIPS-ASC/cpu.v" into library xil_defaultlib
