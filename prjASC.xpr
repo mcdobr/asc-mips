@@ -29,7 +29,7 @@
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="ac701"/>
     <Option Name="DSANumComputeUnits" Val="16"/>
-    <Option Name="WTXSimLaunchSim" Val="61"/>
+    <Option Name="WTXSimLaunchSim" Val="74"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
@@ -52,10 +52,24 @@
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
       <Filter Type="Srcs"/>
-      <File Path="$PSRCDIR/sources_1/imports/MIPS-ASC/alu.v">
+      <File Path="$PSRCDIR/sources_1/new/ID_EX.v">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../MIPS-ASC/alu.v"/>
-          <Attr Name="ImportTime" Val="1494228000"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/HazardDetectionUnit.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/MIPS-ASC/pcLogic.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../MIPS-ASC/pcLogic.v"/>
+          <Attr Name="ImportTime" Val="1494227282"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -63,6 +77,15 @@
       </File>
       <File Path="$PSRCDIR/sources_1/new/ForwardingUnit.v">
         <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/MIPS-ASC/alu.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../MIPS-ASC/alu.v"/>
+          <Attr Name="ImportTime" Val="1494228000"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -98,13 +121,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/ID_EX.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PSRCDIR/sources_1/imports/MIPS-ASC/regFile.v">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PPRDIR/../MIPS-ASC/regFile.v"/>
@@ -117,15 +133,6 @@
       <File Path="$PSRCDIR/sources_1/imports/MIPS-ASC/iMem.v">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PPRDIR/../MIPS-ASC/iMem.v"/>
-          <Attr Name="ImportTime" Val="1494227282"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/MIPS-ASC/pcLogic.v">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../MIPS-ASC/pcLogic.v"/>
           <Attr Name="ImportTime" Val="1494227282"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

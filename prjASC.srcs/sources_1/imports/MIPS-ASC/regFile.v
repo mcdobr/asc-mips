@@ -8,15 +8,17 @@ module regFile #(parameter WIDTH = 32) (clk, regWrite, ra, rb, rc, da, db, dc);
 
 	reg [WIDTH - 1 : 0] mem [0 : WIDTH - 1];
 
-	/*
+	
 	initial begin
 		mem[0] = 0;
-	end*/
+	end
 	
+	/*
 	parameter DATA_FILE = "C:/Users/Mircea/prjASC/regFile.hex";
 	initial begin
 		$readmemh(DATA_FILE, mem, 0, WIDTH - 1);
 	end
+	*/
 	
 
 	// Scriere sincrona
@@ -26,11 +28,11 @@ module regFile #(parameter WIDTH = 32) (clk, regWrite, ra, rb, rc, da, db, dc);
 	end
 
 	// Citire asincrona
-	always@(ra) begin
+	always@(*) begin
 		da = mem[ra];
 	end
 
-	always@(rb) begin
+	always@(*) begin
 		db = mem[rb];
 	end
 

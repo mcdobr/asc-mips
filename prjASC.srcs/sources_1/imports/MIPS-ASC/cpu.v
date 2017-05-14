@@ -40,11 +40,15 @@ module cpu(clk);
 	wire [4:0] rcWB;
 	wire [31:0] aluResultWB, memResultWB, dcWB;	
 	
+	// Hazard unit wires
+	wire PCwrite, IF_IDwrite, controlMuxSel;
+	
 	/*
 	 * Instruction fetch
 	 */
 	pcLogic pcComp(
 		.clk(clk),
+		.pcWrite(PCwrite),
 		.pcSrc(aluZeroMEM & memControlMEM[2]),
 		.jump(jumpPCMEM),
 		.pc(pcIF)
@@ -57,6 +61,7 @@ module cpu(clk);
 	
 	IF_ID IF_IDcomp(
 		.clk(clk),
+		.IF_IDwrite(IF_IDwrite),
 		.jumpPC(pcIF),	// Fara +4 din cauza neconcordantei QtSpim/ H&P
 		.instruction(instructionIF),
 		.jumpPCOut(jumpPCID),
@@ -87,11 +92,21 @@ module cpu(clk);
 		.dc(dcWB)
 	);
 	
+	HazardDetectionUnit hazComp(
+		.ID_EXmemRead(memControlEX[1]),
+		.IF_IDra(raID),
+		.IF_IDrb(rbID),
+		.ID_EXrb(rbEX),
+		.PCwrite(PCwrite),
+		.IF_IDwrite(IF_IDwrite),
+		.controlMuxSel(controlMuxSel)
+	);
+	
 	ID_EX ID_EXcomp(
 		.clk(clk),
-		.wbControl({regWrite, memToReg}),
-		.memControl({branch, memRead, memWrite}),
-		.exControl({regDst, aluOp, aluSrc}),
+		.wbControl((controlMuxSel == 1) ? 2'b00 : {regWrite, memToReg}),
+		.memControl((controlMuxSel == 1) ? 3'b000 : {branch, memRead, memWrite}),
+		.exControl((controlMuxSel == 1) ? 4'b0000 : {regDst, aluOp, aluSrc}),
 		.ra(raID),
 		.rb(rbID),
 		.rc(rcID),
@@ -134,11 +149,11 @@ module cpu(clk);
 	// Cele doua muxuri
 	assign forwardedDA = (forwardA == 2'b00) ? daEX :
 						 (forwardA == 2'b01) ? dcWB :
-						 dOutMEM;
+						 aluResultMEM;
 	
 	assign forwardedDB = (forwardB == 2'b00) ? dbEX :
 						 (forwardB == 2'b01) ? dcWB :
-						 dOutMEM;
+						 aluResultMEM;
 						 	
 	alu aluComp(
 		.opA(forwardedDA),										// daEX in trecut
