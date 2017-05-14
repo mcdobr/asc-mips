@@ -171,7 +171,7 @@ module cpu(clk);
 		.rc(exControlEX[3] == 1 ? rcEX : rbEX),		// (regDst == 1) ? rc : rb
 		.jumpPC(jumpPCEX + imm32EX << 2),				// PC + (imm32 << 2)
 		.aluResult(aluResultEX),
-		.writeDataIn(dbEX),
+		.writeDataIn(forwardedDB),						// Era dbEX
 		.aluZero(aluZeroEX),
 		// Outputs
 		.wbControlOut(wbControlMEM),
