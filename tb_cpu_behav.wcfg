@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="44926419fs"></ZoomEndTime>
-      <Cursor1Time time="18000000fs"></Cursor1Time>
+      <ZoomStartTime time="829652676fs"></ZoomStartTime>
+      <ZoomEndTime time="879736624fs"></ZoomEndTime>
+      <Cursor1Time time="838000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="174"></NameColumnWidth>
       <ValueColumnWidth column_width="50"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="39" />
+   <WVObjectSize size="40" />
    <wvobject fp_name="/tb_cpu/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -51,6 +51,7 @@
    <wvobject fp_name="/tb_cpu/DUT/regComp/mem" type="array">
       <obj_property name="ElementShortName">mem[0:31][31:0]</obj_property>
       <obj_property name="ObjectShortName">mem[0:31][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="/tb_cpu/DUT/instructionIF" type="array">
       <obj_property name="ElementShortName">instructionIF[31:0]</obj_property>
@@ -179,5 +180,10 @@
    <wvobject fp_name="/tb_cpu/DUT/pcComp/WIDTH" type="array">
       <obj_property name="ElementShortName">WIDTH[31:0]</obj_property>
       <obj_property name="ObjectShortName">WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/DUT/iMemComp/mem" type="array">
+      <obj_property name="ElementShortName">mem[0:255][31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem[0:255][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
 </wave_config>
