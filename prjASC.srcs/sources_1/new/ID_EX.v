@@ -1,5 +1,5 @@
-module ID_EX(clk, wbControl, memControl, exControl, ra, rb, rc, opcode, jumpPC, dataA, dataB, imm32,
-wbControlOut, memControlOut, exControlOut, raOut, rbOut, rcOut, opcodeOut, jumpPCOut, dataAOut, dataBOut, imm32Out);
+module ID_EX(clk, wbControl, memControl, exControl, ra, rb, rc, opcode, dataA, dataB, imm32,
+wbControlOut, memControlOut, exControlOut, raOut, rbOut, rcOut, opcodeOut, dataAOut, dataBOut, imm32Out);
 
 	input clk;
 	input [1:0] wbControl;
@@ -7,14 +7,14 @@ wbControlOut, memControlOut, exControlOut, raOut, rbOut, rcOut, opcodeOut, jumpP
 	input [3:0] exControl;
 	input [4:0] ra, rb, rc;
 	input [5:0] opcode;
-	input [31:0] jumpPC, dataA, dataB, imm32;
+	input [31:0] dataA, dataB, imm32;
 
 	output reg [1:0] wbControlOut;
 	output reg [2:0] memControlOut;
 	output reg [3:0] exControlOut;
 	output reg [4:0] raOut, rbOut, rcOut;
 	output reg [5:0] opcodeOut;
-	output reg [31:0] jumpPCOut, dataAOut, dataBOut, imm32Out;
+	output reg [31:0] dataAOut, dataBOut, imm32Out;
 
 	initial begin
 		wbControlOut = 0;
@@ -24,7 +24,6 @@ wbControlOut, memControlOut, exControlOut, raOut, rbOut, rcOut, opcodeOut, jumpP
 		rbOut = 0;
 		rcOut = 0;
 		opcodeOut = 0;
-		jumpPCOut = 0;
 		dataAOut = 0;
 		dataBOut = 0;
 		imm32Out = 0;
@@ -37,7 +36,6 @@ wbControlOut, memControlOut, exControlOut, raOut, rbOut, rcOut, opcodeOut, jumpP
 		raOut <= ra;
 		rbOut <= rb;
 		rcOut <= rc;
-		jumpPCOut = jumpPC;
 		dataAOut <= dataA;
 		dataBOut <= dataB;
 		imm32Out <= imm32;

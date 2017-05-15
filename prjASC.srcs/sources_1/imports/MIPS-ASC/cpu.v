@@ -18,7 +18,7 @@ module cpu(clk);
 	wire [5:0] opcodeID, functID;
 	wire [4:0] raID, rbID, rcID, shamtID;
 	wire [15:0] imm16ID;
-	wire [31:0] daID, dbID, instructionID, jumpPCID, imm32ID;	
+	wire [31:0] daID, dbID, instructionID, imm32ID;	
 	
 	// EX wires
 	wire [1:0] wbControlEX;
@@ -26,7 +26,7 @@ module cpu(clk);
 	wire [3:0] exControlEX;
 	wire [4:0] raEX, rbEX, rcEX;
 	wire [5:0] opcodeEX;
-	wire [31:0] daEX, dbEX, imm32EX, jumpPCEX, aluResultEX;
+	wire [31:0] daEX, dbEX, imm32EX, aluResultEX;
 	wire aluZeroEX;
 		
 	// MEM wires
@@ -34,7 +34,7 @@ module cpu(clk);
 	wire [1:0] wbControlMEM;
 	wire [2:0] memControlMEM;
 	wire [4:0] rcMEM;
-	wire [31:0] jumpPCMEM, aluResultMEM, writeDataMEM, dOutMEM;
+	wire [31:0] imm32MEM, aluResultMEM, writeDataMEM, dOutMEM;
 	
 	// WB wires	
 	wire [1:0] wbControlWB;
@@ -55,7 +55,7 @@ module cpu(clk);
 		.clk(clk),
 		.pcWrite(PCwrite),
 		.pcSrc(aluZeroMEM & memControlMEM[2]),
-		.jump(jumpPCMEM),
+		.imm32(imm32MEM),
 		.pc(pcIF)
 	);
 	
@@ -68,9 +68,7 @@ module cpu(clk);
 	IF_ID IF_IDcomp(
 		.clk(clk),
 		.IF_IDwrite(IF_IDwrite),
-		.jumpPC(pcIF),	// Fara +4 din cauza neconcordantei QtSpim/ H&P
 		.instruction(instructionIF),
-		.jumpPCOut(jumpPCID),
 		.instructionOut(instructionID)
 	);
 	
@@ -118,7 +116,6 @@ module cpu(clk);
 		.ra(raID),
 		.rb(rbID),
 		.rc(rcID),
-		.jumpPC(jumpPCID),
 		.dataA(daID),
 		.dataB(dbID),
 		.imm32(imm32ID),
@@ -130,7 +127,6 @@ module cpu(clk);
 		.raOut(raEX),
 		.rbOut(rbEX),
 		.rcOut(rcEX),
-		.jumpPCOut(jumpPCEX),
 		.dataAOut(daEX),
 		.dataBOut(dbEX),
 		.imm32Out(imm32EX)
@@ -178,7 +174,7 @@ module cpu(clk);
 		.wbControl(wbControlEX),
 		.memControl(memControlEX),
 		.rc(exControlEX[3] == 1 ? rcEX : rbEX),		// (regDst == 1) ? rc : rb
-		.jumpPC(jumpPCEX + imm32EX << 2),				// PC + (imm32 << 2)
+		.imm32(imm32EX << 2),				// PC + (imm32 << 2)
 		.aluResult(aluResultEX),
 		.writeDataIn(forwardedDB),						// Era dbEX
 		.aluZero(aluZeroEX),
@@ -186,7 +182,7 @@ module cpu(clk);
 		.wbControlOut(wbControlMEM),
 		.memControlOut(memControlMEM),
 		.rcOut(rcMEM),
-		.jumpPCOut(jumpPCMEM),
+		.imm32Out(imm32MEM),
 		.aluResultOut(aluResultMEM),
 		.writeDataOut(writeDataMEM),
 		.aluZeroOut(aluZeroMEM)
