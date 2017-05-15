@@ -42,9 +42,10 @@ module cpu(clk);
 	
 	// Hazard unit wires
 	wire PCwrite, IF_IDwrite, controlMuxSel, waitForBranch;
+	wire [31:0] actualInstruction;
 	
 	assign waitForBranch = (opcodeID == BEQ);
-	
+	//assign actualInstruction = (waitForBranch == 1) ? 32'b0 : instructionIF;
 	
 	/*
 	 * Instruction fetch
@@ -59,6 +60,7 @@ module cpu(clk);
 	
 	iMem iMemComp(
 		.readAddr(pcIF),
+		.waitForBranch(waitForBranch),
 		.instruction(instructionIF)
 	);
 	

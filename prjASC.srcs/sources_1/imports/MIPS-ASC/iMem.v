@@ -1,6 +1,7 @@
-module iMem #(parameter WIDTH = 32, parameter WORDS = 256)(readAddr, instruction);
+module iMem #(parameter WIDTH = 32, parameter WORDS = 256)(readAddr, waitForBranch, instruction);
 
 	input [WIDTH - 1 : 0] readAddr;
+	input waitForBranch;
 	output reg [WIDTH - 1 : 0] instruction;
 
 	reg [WIDTH - 1 : 0] mem [0 : WORDS - 1];
@@ -11,8 +12,12 @@ module iMem #(parameter WIDTH = 32, parameter WORDS = 256)(readAddr, instruction
 		$readmemh(IM_FILE, mem, 0, WORDS - 1);
 	end
 	
-	always@(readAddr) begin
-		instruction = mem[readAddr >> 2];
+	always@(*) begin
+		if (waitForBranch == 1) begin
+			instruction = 0;
+		end else begin
+			instruction = mem[readAddr >> 2];
+		end
 	end
 
 endmodule
