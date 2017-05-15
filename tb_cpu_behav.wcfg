@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="35110000fs"></ZoomStartTime>
-      <ZoomEndTime time="80036419fs"></ZoomEndTime>
-      <Cursor1Time time="54000000fs"></Cursor1Time>
+      <ZoomStartTime time="37000000fs"></ZoomStartTime>
+      <ZoomEndTime time="77300001fs"></ZoomEndTime>
+      <Cursor1Time time="58000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="174"></NameColumnWidth>
       <ValueColumnWidth column_width="50"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="12" />
+   <WVObjectSize size="13" />
    <wvobject fp_name="/tb_cpu/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -67,5 +67,10 @@
    <wvobject fp_name="/tb_cpu/DUT/waitForBranch" type="logic">
       <obj_property name="ElementShortName">waitForBranch</obj_property>
       <obj_property name="ObjectShortName">waitForBranch</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_cpu/DUT/memControlEX" type="array">
+      <obj_property name="ElementShortName">memControlEX[2:0]</obj_property>
+      <obj_property name="ObjectShortName">memControlEX[2:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
 </wave_config>

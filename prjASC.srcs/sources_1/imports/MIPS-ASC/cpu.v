@@ -25,6 +25,7 @@ module cpu(clk);
 	wire [2:0] memControlEX;
 	wire [3:0] exControlEX;
 	wire [4:0] raEX, rbEX, rcEX;
+	wire [5:0] opcodeEX;
 	wire [31:0] daEX, dbEX, imm32EX, jumpPCEX, aluResultEX;
 	wire aluZeroEX;
 		
@@ -44,7 +45,7 @@ module cpu(clk);
 	wire PCwrite, IF_IDwrite, controlMuxSel, waitForBranch;
 	wire [31:0] actualInstruction;
 	
-	assign waitForBranch = (opcodeID == BEQ);
+	assign waitForBranch = (opcodeID == BEQ || memControlEX[2] == 1);
 	//assign actualInstruction = (waitForBranch == 1) ? 32'b0 : instructionIF;
 	
 	/*
@@ -110,6 +111,7 @@ module cpu(clk);
 	
 	ID_EX ID_EXcomp(
 		.clk(clk),
+		.opcode(opcodeID),
 		.wbControl((controlMuxSel == 1) ? 2'b00 : {regWrite, memToReg}),
 		.memControl((controlMuxSel == 1) ? 3'b000 : {branch, memRead, memWrite}),
 		.exControl((controlMuxSel == 1) ? 4'b0000 : {regDst, aluOp, aluSrc}),
@@ -121,6 +123,7 @@ module cpu(clk);
 		.dataB(dbID),
 		.imm32(imm32ID),
 		// Outputs
+		.opcodeOut(opcodeEX),
 		.wbControlOut(wbControlEX),
 		.memControlOut(memControlEX),
 		.exControlOut(exControlEX),

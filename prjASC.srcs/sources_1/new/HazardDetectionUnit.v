@@ -15,7 +15,7 @@ module HazardDetectionUnit(ID_EXmemRead, waitForBranch, IF_IDra, IF_IDrb, ID_EXr
 		if (waitForBranch == 1) begin
 			PCwrite = 0;
 			IF_IDwrite = 1;
-			controlMuxSel = 1;
+			controlMuxSel = 0;
 		end else if (ID_EXmemRead == 1 && (ID_EXrb == IF_IDra || ID_EXrb == IF_IDrb)) begin	// stall
 			PCwrite = 0;
 			IF_IDwrite = 0;
