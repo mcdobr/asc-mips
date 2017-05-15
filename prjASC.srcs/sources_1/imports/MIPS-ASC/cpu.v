@@ -41,7 +41,10 @@ module cpu(clk);
 	wire [31:0] aluResultWB, memResultWB, dcWB;	
 	
 	// Hazard unit wires
-	wire PCwrite, IF_IDwrite, controlMuxSel;
+	wire PCwrite, IF_IDwrite, controlMuxSel, waitForBranch;
+	
+	assign waitForBranch = (opcodeID == BEQ);
+	
 	
 	/*
 	 * Instruction fetch
@@ -94,7 +97,7 @@ module cpu(clk);
 	
 	HazardDetectionUnit hazComp(
 		.ID_EXmemRead(memControlEX[1]),
-		.waitForBranch(opcodeID == BEQ),
+		.waitForBranch(waitForBranch),
 		.IF_IDra(raID),
 		.IF_IDrb(rbID),
 		.ID_EXrb(rbEX),
