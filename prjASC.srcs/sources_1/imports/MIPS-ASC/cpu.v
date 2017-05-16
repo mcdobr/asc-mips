@@ -42,7 +42,7 @@ module cpu(clk);
 	wire [31:0] aluResultWB, memResultWB, dcWB;	
 	
 	// Hazard unit wires
-	wire PCwrite, IF_IDwrite, controlMuxSel, waitForBranch;
+	wire PCwrite, IF_IDwrite, controlMuxSel, waitForBranch, IF_IDflush;
 	wire [31:0] actualInstruction;
 	
 	assign waitForBranch = (opcodeID == BEQ || memControlEX[2] == 1);
@@ -68,6 +68,7 @@ module cpu(clk);
 	IF_ID IF_IDcomp(
 		.clk(clk),
 		.IF_IDwrite(IF_IDwrite),
+		.IF_IDflush(memControlMEM[2] == 1 && aluZeroMEM == 1),
 		.instruction(instructionIF),
 		.instructionOut(instructionID)
 	);
